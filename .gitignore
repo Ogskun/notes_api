@@ -1,0 +1,6 @@
+.pyc
+.py[cod]
+
+**/media/
+**/__pycache__/
+localsettings.py
