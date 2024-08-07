@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 
 
 class Note(models.Model):
@@ -18,6 +19,10 @@ class Note(models.Model):
     content = models.TextField()
     is_deleted = models.BooleanField(
         default=False,
+    )
+
+    date_created = models.DateField(
+        auto_now_add=True,
     )
     
     def __str__(self):
