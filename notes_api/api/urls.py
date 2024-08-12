@@ -10,7 +10,8 @@ from knox.views import (
 from api.views import (
     IndexAPIView,
     NotesViewSet,
-    LoginView,
+    LoginView, 
+    RegisterAPIView, 
 )
 
 router = routers.DefaultRouter()
@@ -18,6 +19,7 @@ router.register('notes', NotesViewSet)
 
 urlpatterns = [
     path('', IndexAPIView.as_view(), name='index'),
+    path('register', RegisterAPIView.as_view(), name='register'),
     path('', include(router.urls)),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', 

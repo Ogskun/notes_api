@@ -2,21 +2,26 @@ from django.http import HttpResponse
 from django.views import View
 from django.contrib.auth import login
 
+from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import (
     permissions,
     status,
     viewsets,
 )
+
 from rest_framework.authtoken.serializers import AuthTokenSerializer
-from rest_framework.decorators import action
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from knox.views import LoginView as KnoxLoginView
 
 from core.models import Note
 
 from api.serializers import (
     NoteSerializer,
+    RegisterSerializer, 
 )
 
 
@@ -67,3 +72,20 @@ class NotesViewSet(viewsets.ModelViewSet):
         instance.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+class RegisterAPIView(APIView):
+    serializer = RegisterSerializer
+
+    @swagger_auto_schema(
+        request_body=RegisterSerializer,
+        responses={201: 'Success'}
+    )
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
